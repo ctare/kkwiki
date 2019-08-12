@@ -21,7 +21,7 @@ class PukiwikiRenderer(mistune.Renderer):
         return f"{text}\n"
 
     def image(self, link, title, alt):
-        return f"#ref({link},left)"
+        return f"#ref({link.split("/")[-1]},left)"
 
     def link(self, link, title, text):
         return f"[[{text}:{link}]]"
