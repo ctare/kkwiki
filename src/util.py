@@ -57,6 +57,15 @@ class Text:
                 "max_file_size": "10485760",
             }, files=files)
 
+    def get_home(self):
+        url = f"http://www2.teu.ac.jp/kiku/wiki/?{self.page}"
+        response = requests.get(url, headers=self.authorize)
+        return BeautifulSoup(response.text, "html.parser")
+
+    def get_images(self):
+        soup = self.get_home()
+        return [a.text for a in soup.find(id="attach").find_all("a")[::2]]
+
 def get_text():
     url = "http://www2.teu.ac.jp/kiku/wiki/?cmd=edit&page=%E8%8F%85%E9%87%8E%E8%B7%AF%E5%93%89"
     headers = authorize()
@@ -89,22 +98,19 @@ def resize_image(filename, size=300):
     cv2.imwrite(filename, img)
 
 
-# resized_check_path = "./images/resized.txt"
-# if not os.path.exists(resized_check_path):
-#     with open(resized_check_path, "w+"):
-#         pass
-#
-# with open(resized_check_path, "r") as f:
-#     resized = f.read().split("\n")[:-1]
-#
-# with open(resized_check_path, "a") as f:
-#     for filename in glob("./images/*"):
-#         if filename.endswith(".txt"):
-#             continue
-#         if filename not in resized:
-#             print("resize!!!", filename)
-#             resize_image(filename)
-#             f.write(f"{filename}\n")
+resized_check_path = "./images/resized.txt"
+def get_local_images(resized=False):
+    if resized:
+        if not os.path.exists(resized_check_path):
+            with open(resized_check_path, "w+"):
+                pass
 
-text = get_text()
-text.upload_image("./images/kkwiki_test.png")
+        with open(resized_check_path, "r") as f:
+            return f.read().split("\n")[:-1]
+    else:
+        names = []
+        for filename in glob("./images/*"):
+            if filename.endswith(".txt"):
+                continue
+            names.append(filename)
+        return names
