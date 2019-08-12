@@ -1,2 +1,5 @@
 run:
-	python3 main.py
+	python main.py
+
+today:
+	python init.py

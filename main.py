@@ -1,4 +1,6 @@
 import mistune
+from glob import glob
+import util
 
 class PukiwikiRenderer(mistune.Renderer):
     def block_code(self, code, lang):
@@ -27,10 +29,18 @@ class PukiwikiRenderer(mistune.Renderer):
 puki = PukiwikiRenderer()
 md = mistune.Markdown(renderer=puki)
 
-text = ""
-try:
-    while True:
-        text += input() + "\n"
-except: pass
+def puki(filename):
+    with open(filename) as f:
+        return md(f.read()) + "\n#comment\n"
 
-print(md(text) + "\n#comment")
+
+print("merging")
+merged = "\n".join([puki(filename) for filename in glob("./entries/*")[::-1]])
+
+print("getting text")
+text = util.get_text()
+
+text.write(merged)
+print("writing text")
+response = text.set_text()
+print(response)
