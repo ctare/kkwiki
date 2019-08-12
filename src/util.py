@@ -6,6 +6,11 @@ import cv2
 import os
 
 
+def get_main_url():
+    with open("url") as f:
+        return f.read()[:-1]
+main_url = get_main_url()
+
 def authorize():
     with open("authorize") as f:
         return {"Authorization": f.read()[:-1]}
@@ -33,7 +38,7 @@ class Text:
         return "\n".join(self.text)
 
     def set_text(self):
-        url = "http://www2.teu.ac.jp/kiku/wiki/"
+        url = main_url
         return requests.post(url, headers=self.authorize, data={
             "encode_hint": "ぷ",
             "cmd": "edit",
@@ -45,7 +50,7 @@ class Text:
         })
 
     def upload_image(self, filename):
-        url = "http://www2.teu.ac.jp/kiku/wiki/"
+        url = main_url
         with open(filename, 'rb') as binary:
             files = {"attach_file": (filename.split("/")[-1], binary, mime)}
 
@@ -58,7 +63,7 @@ class Text:
             }, files=files)
 
     def get_home(self):
-        url = f"http://www2.teu.ac.jp/kiku/wiki/?{self.page}"
+        url = f"{main_url}?{self.page}"
         response = requests.get(url, headers=self.authorize)
         return BeautifulSoup(response.text, "html.parser")
 
@@ -67,7 +72,7 @@ class Text:
         return [a.text for a in soup.find(id="attach").find_all("a")[::2]]
 
 def get_text():
-    url = "http://www2.teu.ac.jp/kiku/wiki/?cmd=edit&page=%E8%8F%85%E9%87%8E%E8%B7%AF%E5%93%89"
+    url = f"{main_url}?cmd=edit&page=%E8%8F%85%E9%87%8E%E8%B7%AF%E5%93%89"
     headers = authorize()
 
     response = requests.get(url, headers=headers)
