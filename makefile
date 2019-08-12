@@ -1,5 +1,8 @@
 run:
-	python main.py
+	python src/util.py
 
-today:
-	python init.py | xargs nvim
+# run:
+# 	python src/main.py
+#
+# today:
+# 	python src/init.py | xargs nvim
