@@ -14,8 +14,7 @@ header = f"{today.month}月{today.day}日（{today:%a}）"
 
 fullpath = f"entries/{filename}"
 
-template = f"""
-# {header}
+template = f"""# {header}
 
 * 研究
 """
@@ -23,3 +22,4 @@ template = f"""
 if not os.path.exists(fullpath):
     with open(fullpath, "w") as f:
         f.write(template)
+print(fullpath)

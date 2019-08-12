@@ -2,4 +2,4 @@ run:
 	python main.py
 
 today:
-	python init.py
+	python init.py | xargs nvim
