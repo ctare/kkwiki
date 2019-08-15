@@ -18,7 +18,7 @@ class PukiwikiRenderer(mistune.Renderer):
         return f"- {text}\n\n"
 
     def paragraph(self, text):
-        return f"{text}\n"
+        return f"{text}\n\n"
 
     def image(self, link, title, alt):
         return f"#ref({link.split('/')[-1]},left)"
