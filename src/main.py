@@ -35,7 +35,7 @@ def puki(filename):
 
 
 print("merging")
-merged = "\n".join([puki(filename) for filename in glob("./entries/*")[::-1]])
+merged = "\n".join([puki(filename) for filename in sorted(glob("./entries/*"), reverse=True)])
 
 print("getting text")
 text = util.get_text()
