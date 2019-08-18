@@ -90,7 +90,7 @@ def get_text():
     return Text(text, start, end, digest, page, headers)
 
 
-def resize_image(filename, size=300):
+def resize_image(filename, size=600):
     img = cv2.imread(filename)
     h, w = img.shape[:2]
     if h < w:

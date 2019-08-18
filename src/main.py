@@ -21,7 +21,10 @@ class PukiwikiRenderer(mistune.Renderer):
         return f"{text}\n\n"
 
     def image(self, link, title, alt):
-        return f"#ref({link.split('/')[-1]},left)"
+        size = "50%"
+        if ":" in alt:
+            size = alt.split(":")[-1]
+        return f"#ref({link.split('/')[-1]},left,{size})"
 
     def link(self, link, title, text):
         return f"[[{text}:{link}]]"
