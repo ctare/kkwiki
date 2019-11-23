@@ -8,8 +8,8 @@ import os
 
 def get_main_url():
     with open("url") as f:
-        return f.read()[:-1]
-main_url = get_main_url()
+        return f.read().split("\n")[:2]
+main_url, page_url = get_main_url()
 
 def authorize():
     with open("authorize") as f:
@@ -91,7 +91,7 @@ class Text:
         return [a.text for a in soup.find(id="attach").find_all("a")[::2]]
 
 def get_text():
-    url = f"{main_url}?cmd=edit&page=%E8%8F%85%E9%87%8E%E8%B7%AF%E5%93%89"
+    url = f"{main_url}?cmd=edit&page={page_url}"
     headers = authorize()
 
     response = requests.get(url, headers=headers)
