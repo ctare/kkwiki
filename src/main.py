@@ -32,16 +32,18 @@ class PukiwikiRenderer(mistune.Renderer):
 puki = PukiwikiRenderer()
 md = mistune.Markdown(renderer=puki)
 
-def puki(filename):
+def puki(filename, comments):
     with open(filename) as f:
-        return md(f.read()) + "\n#comment\n"
+        name = filename.split("/")[-1]
+        comment = "\n".join(comments.get(name, ""))
+        return md(f.read()) + f"\n//{name} cmt_begin\n{comment}\n#comment\n//{name} cmt_end\n"
 
-
-print("merging")
-merged = "\n".join([puki(filename) for filename in sorted(glob("./entries/*"), reverse=True)])
 
 print("getting text")
 text = util.get_text()
+
+print("merging")
+merged = "\n".join([puki(filename, text.comments) for filename in sorted(glob("./entries/*"), reverse=True)])
 
 text.write(merged)
 print("writing text")

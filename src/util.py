@@ -26,6 +26,25 @@ class Text:
         self.digest = digest
         self.page = page
         self.authorize = authorize
+
+        comments = {}
+        comment_time = False
+        comment = []
+        for t in self.text[self.start:self.end]:
+            if comment_time:
+                comment.append(t)
+            begin = re.match("//(.*)cmt_begin", t)
+            if begin:
+                filename = begin.groups()[0].strip()
+                comment_time = True
+            if re.match("//(.*) cmt_end", t):
+                comment_time = False
+                # print(comment[:-2])
+                # print("------")
+                comments[filename] = comment[:-2]
+                comment = []
+        self.comments = comments
+
         del self.text[start: end]
         self.end = start
 
@@ -88,7 +107,6 @@ def get_text():
     digest = soup.find("input", attrs={"name": "digest"})["value"]
     page = soup.find("input", attrs={"name": "page"})["value"]
     return Text(text, start, end, digest, page, headers)
-
 
 def resize_image(filename, size=600):
     img = cv2.imread(filename)
